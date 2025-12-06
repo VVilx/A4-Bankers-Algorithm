@@ -36,5 +36,44 @@ bool is_safe_state(int allocation[][MAX_RESOURCES],
                    int m) {
     
     // TODO: Implement the safety algorithm    
+    bool finished[MAX_THREADS];  // Use MAX_THREADS from header
+    int work[MAX_RESOURCES];
 
+    for (int i = 0; i < n; i++)
+        finished[i] = false;
+
+    for (int j = 0; j < m; j++)
+        work[j] = available[j];
+
+    int count = 0;
+
+    while (count < n) {
+        bool found = false;
+
+        for (int i = 0; i < n; i++) {
+            if (!finished[i]) {
+                bool can_run = true;
+                for (int j = 0; j < m; j++) {
+                    if (need[i][j] > work[j]) {
+                        can_run = false;
+                        break;
+                    }
+                }
+
+                if (can_run) {
+                    for (int j = 0; j < m; j++)
+                        work[j] += allocation[i][j];
+
+                    safe_sequence[count++] = i;
+                    finished[i] = true;
+                    found = true;
+                }
+            }
+        }
+
+        if (!found)
+            return false;  // unsafe
+    }
+
+    return true;  // safe
 }

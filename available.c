@@ -25,4 +25,15 @@ void calculate_available(int allocation[][MAX_RESOURCES],
                          int m) {
     
     // TODO: Implement the available resources calculation
+    // Initialize available with total system resources
+    for (int j = 0; j < m; j++) {
+        int allocated_sum = 0;
+
+        
+        for (int i = 0; i < n; i++) {
+            allocated_sum += allocation[i][j];
+        }
+
+        available[j] = total_resources[j] - allocated_sum;
+    }
 }

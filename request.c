@@ -41,4 +41,53 @@ bool thread_resource_request(int thread_id, int request[],
                             int available[], int n, int m) {
     
     // TODO: Implement resource request processing    
+    // Check request <= need
+    for (int j = 0; j < m; j++) {
+        if (request[j] > need[thread_id][j]) {
+            return false;
+        }
+    }
+
+    // Check request <= available
+    for (int j = 0; j < m; j++) {
+        if (request[j] > available[j]) {
+            return false;
+        }
+    }
+
+    // Temporary backups
+    int old_available[m];
+    int old_allocation[n][MAX_RESOURCES];
+    int old_need[n][MAX_RESOURCES];
+
+    // Save state
+    for (int j = 0; j < m; j++) old_available[j] = available[j];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++) {
+            old_allocation[i][j] = allocation[i][j];
+            old_need[i][j] = need[i][j];
+        }
+
+    // Apply tentative request
+    for (int j = 0; j < m; j++) {
+        available[j] -= request[j];
+        allocation[thread_id][j] += request[j];
+        need[thread_id][j] -= request[j];
+    }
+
+    // Check safe state
+    int temp_safe[n];
+    if (is_safe_state(allocation, need, available, temp_safe, n, m)) {
+        return true;
+    }
+
+    // Rollback
+    for (int j = 0; j < m; j++) available[j] = old_available[j];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++) {
+            allocation[i][j] = old_allocation[i][j];
+            need[i][j] = old_need[i][j];
+        }
+
+    return false;
 }

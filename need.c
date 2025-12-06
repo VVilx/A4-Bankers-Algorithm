@@ -26,4 +26,11 @@ void calculate_need(int allocation[][MAX_RESOURCES],
                     int m) {
     
     // TODO: Implement the need matrix calculation    
+    for (int i = 0; i < n; i++) {
+
+        for (int j = 0; j < m; j++) {
+
+            need[i][j] = max[i][j] - allocation[i][j];
+        }
+    }  
 }
