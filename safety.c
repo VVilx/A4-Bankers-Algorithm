@@ -36,7 +36,7 @@ bool is_safe_state(int allocation[][MAX_RESOURCES],
                    int m) {
     
     // TODO: Implement the safety algorithm    
-    bool finished[MAX_THREADS];  // Use MAX_THREADS from header
+    bool finished[MAX_THREADS];
     int work[MAX_RESOURCES];
 
     for (int i = 0; i < n; i++)
